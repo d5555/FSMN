@@ -1,4 +1,3 @@
-```
 class scFSMNCell(nn.Module): #compact scalar FSMN with bidirectional option
     def __init__(self, memory_size, input_size, output_size, bidirectional=False , drop=0.1, device=None, dtype=torch.float32):
         super().__init__()
@@ -37,4 +36,3 @@ class scFSMNCell(nn.Module): #compact scalar FSMN with bidirectional option
         p = torch.matmul(memory, p)
         p = torch.matmul(p, self._W2 ) + self._bias2
         return p
-```
