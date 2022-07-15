@@ -1,3 +1,6 @@
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 
 class sFSMNCell(nn.Module): #scalar FSMN
     def __init__(self, memory_size, input_size, output_size, bidirectional=False, drop=0.1, device=None, dtype=torch.float32):
@@ -166,3 +169,24 @@ class FSMN(nn.Module): # FSMN layer
       for layer in self.fsmn_layers: 
         x = self.activation(self.norm1(layer(x, pad_mask)))
       return self.linear2(self.dropout(self.activation(self.linear1(x))))  
+
+def main():
+    batch = 2
+    memory_size = 3
+    input_size = 5
+    hidden_size = 10
+    layer_output_size = 5
+    sequence_size = 11
+    n_layers = 3 # number of layers
+    ff_size = 20 
+
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    torch.manual_seed(20)
+    src=torch.randn((batch, sequence_size, input_size)).to(device)
+    #  memory_size, input_size, hidden_size, layer_output_size, n_layers, fsmn_class, ff_size, drop=0.1, activation=F.relu, bidirectional=False, device=None, dtype=torch.float32
+    fsmn = FSMN(memory_size, input_size, hidden_size , layer_output_size, n_layers, sFSMNCell, ff_size, drop=0.1, device=device, activation=F.relu, bidirectional=True).to(device)
+    src_pad_mask = (torch.tensor([[1,2,3,5,6,6,8,8,13,13,13], [1,2,3,5,6,6,13,13,13,13,13]]) != 13).to(device) 
+    fsmn(src, pad_mask=src_pad_mask)
+
+if __name__ == '__main__':
+    main()
