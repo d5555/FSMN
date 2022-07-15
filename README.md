@@ -2,9 +2,9 @@
 PyTorch implementations of FSMN (Feedforward Sequential Memory Networks):<br>
 
 sFSMNCell  - scalar FSMN<br>
-scFSMNCell - scalar compact FSMN<br>
+csFSMNCell - scalar compact FSMN<br>
 vFSMNCell  - vectorized FSMN<br>
-vcFSMNCell - vectorized compact FSMN<br>
+cvFSMNCell - vectorized compact FSMN<br>
 
 See:
 - Feedforward Sequential Memory Networks: A New Structure to Learn Long-term Dependency [[arXiv](https://arxiv.org/abs/1512.08301)]
