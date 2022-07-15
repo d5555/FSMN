@@ -184,6 +184,7 @@ def main():
     torch.manual_seed(20)
     src=torch.randn((batch, sequence_size, input_size)).to(device)
     #  memory_size, input_size, hidden_size, layer_output_size, n_layers, fsmn_class, ff_size, drop=0.1, activation=F.relu, bidirectional=False, device=None, dtype=torch.float32
+    #fsmn_class : sFSMNCell, csFSMNCell, vFSMNCell or cvFSMNCell
     fsmn = FSMN(memory_size, input_size, hidden_size , layer_output_size, n_layers, sFSMNCell, ff_size, drop=0.1, device=device, activation=F.relu, bidirectional=True).to(device)
     src_pad_mask = (torch.tensor([[1,2,3,5,6,6,8,8,13,13,13], [1,2,3,5,6,6,13,13,13,13,13]]) != 13).to(device) 
     
