@@ -186,7 +186,8 @@ def main():
     #  memory_size, input_size, hidden_size, layer_output_size, n_layers, fsmn_class, ff_size, drop=0.1, activation=F.relu, bidirectional=False, device=None, dtype=torch.float32
     fsmn = FSMN(memory_size, input_size, hidden_size , layer_output_size, n_layers, sFSMNCell, ff_size, drop=0.1, device=device, activation=F.relu, bidirectional=True).to(device)
     src_pad_mask = (torch.tensor([[1,2,3,5,6,6,8,8,13,13,13], [1,2,3,5,6,6,13,13,13,13,13]]) != 13).to(device) 
-    fsmn(src, pad_mask=src_pad_mask)
+    
+    print (  fsmn(src, pad_mask=src_pad_mask) )
 
 if __name__ == '__main__':
     main()
