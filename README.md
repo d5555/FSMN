@@ -34,9 +34,9 @@ bidirectional = True
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 torch.manual_seed(20)
 src=torch.randn((batch, sequence_size, input_size)).to(device)
-#  memory_size, input_size, hidden_size, layer_output_size, n_layers, fsmn_class, ff_size, drop=0.1, activation=F.relu, bidirectional=bidirectional, device=None, dtype=torch.float32
+#  memory_size, input_size, hidden_size, layer_output_size, n_layers, fsmn_class, ff_size, drop=0.1, activation=F.relu, bidirectional=False, device=None, dtype=torch.float32
 #fsmn_class : sFSMNCell, csFSMNCell, vFSMNCell, cvFSMNCell
-fsmn = FSMN(memory_size, input_size, hidden_size , layer_output_size, n_layers, cvFSMNCell, ff_size, drop=0.1, device=device, activation=F.relu, bidirectional=True).to(device)
+fsmn = FSMN(memory_size, input_size, hidden_size , layer_output_size, n_layers, cvFSMNCell, ff_size, drop=0.1, device=device, activation=F.relu, bidirectional=bidirectional).to(device)
 src_pad_mask = (torch.tensor([[1,2,3,5,6,6,8,8,13,13,13], [1,2,3,5,6,6,13,13,13,13,13]]) != 13).to(device) 
 predict = fsmn(src, pad_mask=src_pad_mask)
 print (  predict.shape )
