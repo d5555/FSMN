@@ -187,7 +187,9 @@ def main():
     fsmn = FSMN(memory_size, input_size, hidden_size , layer_output_size, n_layers, sFSMNCell, ff_size, drop=0.1, device=device, activation=F.relu, bidirectional=True).to(device)
     src_pad_mask = (torch.tensor([[1,2,3,5,6,6,8,8,13,13,13], [1,2,3,5,6,6,13,13,13,13,13]]) != 13).to(device) 
     
-    print (  fsmn(src, pad_mask=src_pad_mask) )
+    predict = fsmn(src, pad_mask=src_pad_mask)
+    print (  predict.shape )
+    print (  predict )
 
 if __name__ == '__main__':
     main()
