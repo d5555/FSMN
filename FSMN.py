@@ -126,10 +126,12 @@ class cvFSMNCell(nn.Module): #compact vectorized FSMN
         self._bias1 = nn.Parameter(torch.randn( output_size))  
         self._bias2 = nn.Parameter(torch.randn( output_size))
 
-        embed_tensor=torch.Tensor(memory_size, output_size) 
+        embed_tensor=torch.Tensor(memory_size + 1, output_size) #add (+ 1) for 1 embedding
         self.embeddings_table = nn.Parameter(embed_tensor)
         nn.init.xavier_uniform_(self.embeddings_table)
-        with torch.no_grad(): self.embeddings_table[0]=0
+        with torch.no_grad(): 
+            self.embeddings_table[0]=0
+            self.embeddings_table[-1]=1
 
         nn.init.xavier_uniform_(self._W1)
         nn.init.xavier_uniform_(self._W2)
@@ -140,9 +142,11 @@ class cvFSMNCell(nn.Module): #compact vectorized FSMN
 
         memory=torch.ones((num_steps,num_steps), requires_grad=False).tril(-1).cumsum(0).triu(- self._memory_size+1).long()
         if self.bidirectional: memory = memory + memory.t()
-        memory = memory.fill_diagonal_(1).unsqueeze(0).expand(input_data.size(0),-1,-1).to(self.device)
+        memory = memory.fill_diagonal_(self.embeddings_table.size(0)-1).unsqueeze(0).expand(input_data.size(0),-1,-1).to(self.device)
         if pad_mask is not None: memory=pad_mask.unsqueeze(1)*memory
-        with torch.no_grad(): self.embeddings_table[0]=0
+        with torch.no_grad(): 
+            self.embeddings_table[0]=0
+            self.embeddings_table[-1]=1
         memory = self.embeddings_table[memory].to(self.device)
         
         p = torch.einsum('bijd,bjd->bid', memory, p)#'bijd,bjd->bid'
